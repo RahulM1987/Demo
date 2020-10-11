@@ -57,7 +57,7 @@ class Demo3Tests: XCTestCase {
     }
     
     //Phase 2
-    func checkForNilDescription() throws {
+    func testcheckForNilDescription() throws {
         let bundle = Bundle(for: Demo3Tests.self)
         guard let url = bundle.url(forResource: "mockdata", withExtension: "json") else {
             XCTFail("Missing file:mockdata.json")
@@ -70,13 +70,13 @@ class Demo3Tests: XCTestCase {
                 do {
                     let flash = try! JSONDecoder().decode(RootClass.self, from: jsonData)
                     self.jsondata = flash
-                    XCTAssertNil(self.jsondata!.rows?[1].description!)
+                    XCTAssertNil(self.jsondata!.rows?[1].description)
                 }
             }
         }
     }
     
-    func checkForNilimageURL() throws {
+    func testcheckForNilimageURL() throws {
         let bundle = Bundle(for: Demo3Tests.self)
         guard let url = bundle.url(forResource: "mockdata", withExtension: "json") else {
             XCTFail("Missing file:mockdata.json")
@@ -89,13 +89,13 @@ class Demo3Tests: XCTestCase {
                 do {
                     let flash = try! JSONDecoder().decode(RootClass.self, from: jsonData)
                     self.jsondata = flash
-                    XCTAssertNil(self.jsondata!.rows?[4].imageHref!)
+                    XCTAssertNil(self.jsondata!.rows?[4].imageHref)
                 }
             }
         }
     }
     
-    func checkForNilIndex() throws {
+    func testcheckForNilTitle() throws {
         let bundle = Bundle(for: Demo3Tests.self)
         guard let url = bundle.url(forResource: "mockdata", withExtension: "json") else {
             XCTFail("Missing file:mockdata.json")
@@ -108,7 +108,7 @@ class Demo3Tests: XCTestCase {
                 do {
                     let flash = try! JSONDecoder().decode(RootClass.self, from: jsonData)
                     self.jsondata = flash
-                    XCTAssertNil(self.jsondata!.rows?[7])
+                    XCTAssertNil(self.jsondata!.rows?[7].title)
                 }
             }
         }
