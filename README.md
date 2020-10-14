@@ -8,9 +8,8 @@ Xcode 12
 * Supports both Landscape and Portrait.
 * Few Unit test. 
 * Network connection check before request.
-* Refresh button.
 * Supports Dark mode (Extra).
 
 
 
-![Output sample](https://github.com/RahulM1987/Demo/blob/main/demo.gif)
+![Output sample](https://github.com/RahulM1987/Demo/blob/main/demo1.gif)
