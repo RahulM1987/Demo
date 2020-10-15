@@ -11,25 +11,25 @@ enum constraintsConstants {
 }
 
 class CustomTableViewCell: UITableViewCell {
-
+    
     var imageview = UIImageView()
     let title = UILabel()
     let descript = UILabel()
     var myViewHeightConstraint: NSLayoutConstraint!
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
+        
         imageview.layer.cornerRadius = 10
         imageview.layer.masksToBounds = true
         imageview.image = #imageLiteral(resourceName: "no-image-available")
         imageview.translatesAutoresizingMaskIntoConstraints = false
         title.translatesAutoresizingMaskIntoConstraints = false
         descript.translatesAutoresizingMaskIntoConstraints = false
-
+        
         self.addSubViewsAndlayout()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -60,14 +60,14 @@ class CustomTableViewCell: UITableViewCell {
         descript.leftAnchor.constraint(equalTo: self.imageview.rightAnchor, constant: constraintsConstants.spacing).isActive = true
         descript.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -constraintsConstants.spacing).isActive = true
         descript.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -constraintsConstants.bottom).isActive = true
-                myViewHeightConstraint = descript.heightAnchor.constraint(equalToConstant: 50)
-                myViewHeightConstraint.priority = UILayoutPriority.init(999)
-                myViewHeightConstraint.isActive = true
+        myViewHeightConstraint = descript.heightAnchor.constraint(equalToConstant: 50)
+        myViewHeightConstraint.priority = UILayoutPriority.init(999)
+        myViewHeightConstraint.isActive = true
         
     }
     
     private var task: URLSessionDataTask?
-
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         task?.cancel()
@@ -75,57 +75,57 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func setupViews(height:CGFloat) {
-            myViewHeightConstraint.constant = height
-        }
-        
+        myViewHeightConstraint.constant = height
+    }
+    
     // Phase 2 Start
     let imageCache = NSCache<NSString, AnyObject>()
     var imageURLString: String?
-
-        func downloadImageFrom(urlString: String) {
-            guard let url = URL(string: urlString) else { return }
-            downloadImageFromURL(url: url)
-        }
-
-        func downloadImageFromURL(url: URL) {
-            if let cachedImage = imageCache.object(forKey: url.absoluteString as NSString) as? UIImage {
-                DispatchQueue.main.async {
-                    self.imageview.image = cachedImage
-                }
-            } else {
-                URLSession.shared.dataTask(with: url) { data, response, error in
-                    guard let data = data, error == nil else { return }
-                        let imageToCache = UIImage(data: data)
-                        if imageToCache != nil {
-                            self.imageCache.setObject(imageToCache!, forKey: url.absoluteString as NSString)
-                            DispatchQueue.main.async {
-                                self.imageview.image = imageToCache
-                            }
-                        } else {
-                            DispatchQueue.main.async {
-                                self.imageview.image = #imageLiteral(resourceName: "no-image-available") }
-
-                            if let res = response as? HTTPURLResponse {
-                                switch res.statusCode {
-                                case 404:
-                                    print("File not found")
-                                    DispatchQueue.main.async {
-                                        self.imageview.image = #imageLiteral(resourceName: "404") }
-                                    break
-                                case 403:
-                                    DispatchQueue.main.async {
-                                        self.imageview.image = #imageLiteral(resourceName: "403") }
-                                    break
-                                default:
-                                    break
-                                    
-                                }
-                            }
-                        }
-                }.resume()
+    
+    func downloadImageFrom(urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        downloadImageFromURL(url: url)
+    }
+    
+    func downloadImageFromURL(url: URL) {
+        if let cachedImage = imageCache.object(forKey: url.absoluteString as NSString) as? UIImage {
+            DispatchQueue.main.async {
+                self.imageview.image = cachedImage
             }
+        } else {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                guard let data = data, error == nil else { return }
+                let imageToCache = UIImage(data: data)
+                if imageToCache != nil {
+                    self.imageCache.setObject(imageToCache!, forKey: url.absoluteString as NSString)
+                    DispatchQueue.main.async {
+                        self.imageview.image = imageToCache
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.imageview.image = #imageLiteral(resourceName: "no-image-available") }
+                    
+                    if let res = response as? HTTPURLResponse {
+                        switch res.statusCode {
+                        case 404:
+                            print("File not found")
+                            DispatchQueue.main.async {
+                                self.imageview.image = #imageLiteral(resourceName: "404") }
+                            break
+                        case 403:
+                            DispatchQueue.main.async {
+                                self.imageview.image = #imageLiteral(resourceName: "403") }
+                            break
+                        default:
+                            break
+                            
+                        }
+                    }
+                }
+            }.resume()
         }
+    }
     // Phase 2 End
-
+    
     
 }

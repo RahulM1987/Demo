@@ -13,7 +13,7 @@ class ViewController: UIViewController ,UITableViewDelegate, UITableViewDataSour
         return table
     }()
     var refreshControl = UIRefreshControl() // Phase 2
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,11 +28,11 @@ class ViewController: UIViewController ,UITableViewDelegate, UITableViewDataSour
         tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
         self.tableView.estimatedRowHeight = 150.0
         self.tableView.rowHeight = UITableView.automaticDimension
-       
+        
         //Phase 2
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-           refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
-           tableView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        tableView.addSubview(refreshControl)
         //
     }
     
@@ -63,7 +63,7 @@ class ViewController: UIViewController ,UITableViewDelegate, UITableViewDataSour
             } else {
                 cell.imageview.image = #imageLiteral(resourceName: "no-image-available")
             }
-//        }
+            //        }
         }
         return cell
     }
@@ -79,7 +79,7 @@ class ViewController: UIViewController ,UITableViewDelegate, UITableViewDataSour
     func httprequest() {
         if Reachability.isConnectedToNetwork(){
             print("Internet Connection Available!")
-                MakeHttpRequest.sharedInstance.dataRequest { ( data ) in
+            MakeHttpRequest.sharedInstance.dataRequest { ( data ) in
                 self.datasource = data
                 DispatchQueue.main.async {
                     self.title = self.datasource?.title
@@ -88,25 +88,25 @@ class ViewController: UIViewController ,UITableViewDelegate, UITableViewDataSour
                     self.tableView.layoutIfNeeded()
                     self.tableView.reloadData()
                 }
-                }
+            }
         }else{
             print("Internet Connection not Available!")
             MakeHttpRequest.sharedInstance.showAlertMessage(vc: self, titleS: "Demo", messageS: "Please check internet connection and try again.")
         }
     }
-
-	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-    super.viewWillTransition(to: size, with: coordinator)
-
-    let animationHandler: ((UIViewControllerTransitionCoordinatorContext) -> Void) = { [weak self] (context) in
-        self?.tableView.reloadData()
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        let animationHandler: ((UIViewControllerTransitionCoordinatorContext) -> Void) = { [weak self] (context) in
+            self?.tableView.reloadData()
+        }
+        let completionHandler: ((UIViewControllerTransitionCoordinatorContext) -> Void) = { [weak self] (context) in
+            self?.tableView.reloadData()
+        }
+        coordinator.animate(alongsideTransition: animationHandler, completion: completionHandler)
+        
     }
-    let completionHandler: ((UIViewControllerTransitionCoordinatorContext) -> Void) = { [weak self] (context) in
-        self?.tableView.reloadData()
-    }
-    coordinator.animate(alongsideTransition: animationHandler, completion: completionHandler)
-
-}
     
     
 }
